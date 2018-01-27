@@ -1,2 +1,2 @@
 # mybookwall
-mybookwall web app. test
+mybookwall web app
