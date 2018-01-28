@@ -180,9 +180,8 @@
 						// Create session and log them in
 						$_SESSION["username"] = $email; 
 
-						// echo $_SESSION["username"];
-						header("Location: http://mybookwall.com");
 
+						header("Location: http://mybookwall.com");
 					}
 
 				}

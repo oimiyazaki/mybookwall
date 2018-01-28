@@ -1,3 +1,4 @@
+
 <script type="text/javascript">
 
 ////////////// Login Signup page //////////////
@@ -14,8 +15,6 @@
 ////////////// add a book page //////////////
 
 	function callback(jsonp) {
-
-		alert("hello world");
 
 		var bookResults = "";
 
