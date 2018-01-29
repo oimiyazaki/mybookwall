@@ -121,6 +121,10 @@
 
 			$("button").click(function () {
 				alert("this is a image");
+		$("button").click(function () {
+				alert("this is a image");
+
+		});
 
 			});
 

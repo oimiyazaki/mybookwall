@@ -13,20 +13,6 @@
 	        <input id="searchBookQuery" type="text" name="search" placeholder="Search by title, author, ISBN" required>
 	        <input class="button-submit" id="searchBookButton" type="submit" name="searchBookbutton" value="Search">
 	    </form>
-
-	        <!-- test -->
-
-  			<div id="insert">x</div>
-  			  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
-
-  			<script type="text/javascript">
-  				
-
-
-		</script>
-        <!-- test -->
-
-
   	</div>
 </div>
 <div class="row">

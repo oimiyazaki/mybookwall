@@ -5,7 +5,6 @@
   // function, actions, header
   include ("functions.php");
   include ("actions.php");  
-  // include("functionsJs.php");
   include ("views/header.php");
 
 
