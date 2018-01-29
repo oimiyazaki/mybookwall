@@ -21,11 +21,12 @@
 	// if session exists, welcome
 	if (array_key_exists("username", $_SESSION)) {
 
-		$menu = "<li class='menu-right'><form method='post' id='logOut'><input type='submit' name='LogOut' value='Log out'></form></li>";
+		// $menu = "<li class='menu-right'><form method='post' id='logOut'><input type='submit' name='LogOut' value='Log out'></form></li>";
+		$menu = "<li class='menu-left'><a href='http://mybookwall.com/?p=addabook'>Add a Book</a></li><li class='menu-right'><form method='post' id='logOut'><input type='submit' name='LogOut' value='Log out'></form></li>";
 
 	} else {
 
-		$menu = "<li class='menu-right'><a href='http://mybookwall.com/?p=login'>Login or Sign up</a></li>";
+		$menu = "";
 
 	}
 
