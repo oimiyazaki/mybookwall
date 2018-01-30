@@ -14,9 +14,10 @@
 
 	function callback(jsonp) {
 
-		rawObject = jsonp;
 
 		var bookResults = "";
+
+		var bookResultsArray = [];
 
 		///////////// Generate table with search results /////////////
 
@@ -53,7 +54,7 @@
 			// get authors if it exists
 			if (jsonp.items[book].volumeInfo.hasOwnProperty("authors")) {
 
-				author = "by " + jsonp.items[book].volumeInfo.authors[0];
+				author = jsonp.items[book].volumeInfo.authors[0];
 
 			} 
 
@@ -82,7 +83,21 @@
 			} 
 
 			// construct html
-			bookResults += "<tr><td><img src=" + image + "></td><td><strong>" + title + "<br></strong><br>" + author + "<br><br>Published: " + publishedDate + "<br><br>ISBN-13: " + isbn13 + "<br><td><button class='button' isbn13='" + isbn13 +"'>Add to Library</button></td></tr>";
+			bookResults += "<tr><td><img src=" + image + "></td><td><strong>" + title + "<br></strong><br>by " + author + "<br><br>Published: " + publishedDate + "<br><br>ISBN-13: " + isbn13 + "<br><td><button class='button' isbn13='" + isbn13 +"'>Add to Library</button></td></tr>";
+
+
+			// build array of book objects
+			var bookObj = {
+			  isbn13 : isbn13,
+			  title : title,
+			  author : author,
+			  publishedDate: publishedDate,
+			  image : image
+			};
+
+			// push object to array
+			bookResultsArray.push(bookObj);
+
 
 		}
 		
@@ -95,45 +110,24 @@
 
 		///////////// Make the Add to Library work /////////////
 
-		// add to library buttons
 		$("button").click(function () {
 			
-			alert($(this).attr("isbn13"));
+			for (book in bookResultsArray) {
 
+				if (bookResultsArray[book].isbn13 == $(this).attr("isbn13")) {
+
+					console.log(bookResultsArray[book]);
+
+				}
+
+			}
 
 		});
 
-
-		// object test start
-
-		var bookResultsObj = {};
+		
+		
 
 
-		var bookObj = {
-		  author : "omar",
-		  date : "05/17/1990",
-		  image: "http:home.com"
-		};
-
-		bookResultsObj.isbn13a = bookObj;
-
-
-		console.log(bookResultsObj.isbn13a.author);
-		console.log(bookResultsObj.isbn13a.image);
-
-		var bookObj = {
-		  author : "brownie",
-		  date : "05/26/1985",
-		  image: "http:homer.com"
-		};
-
-		bookResultsObj.isbn13b = bookObj;
-
-
-		console.log(bookResultsObj.isbn13b.author);
-		console.log(bookResultsObj.isbn13b.image);
-
-		// object test end
 
 
 
