@@ -9,8 +9,10 @@
 		<header>
 			<ul>
 				<li class="menu-left"><a class="active" href="http://mybookwall.com">My Library</a></li>
+				
 				<!-- Display full menu if they are logged in -->
 				<?php echo $menu; ?>
+				
 			</ul>
 
 

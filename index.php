@@ -1,6 +1,4 @@
 <?php 
-    // Start session
-    session_start();
 
   // function, actions, header
   include ("functions.php");

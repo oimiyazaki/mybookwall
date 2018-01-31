@@ -110,13 +110,35 @@
 
 		///////////// Make the Add to Library work /////////////
 
+
+		function addBookToDatabase() {
+		$.ajax({
+			url: "http://mybookwall.com/actions.php?author=" + bookResultsArray[book].author + "&image=" + bookResultsArray[book].image + "&isbn13=" + bookResultsArray[book].isbn13 + "&publishedDate=" + bookResultsArray[book].publishedDate + "&title=" + bookResultsArray[book].title + "",
+			type: "GET", /// ::::::::::::::::: Change GET to POST
+			success: function(data) {
+
+
+				console.log(data);
+
+
+			}});
+
+		}
+
+
 		$("button").click(function () {
 			
 			for (book in bookResultsArray) {
 
 				if (bookResultsArray[book].isbn13 == $(this).attr("isbn13")) {
 
-					console.log(bookResultsArray[book]);
+					// console.log(bookResultsArray[book].author);
+					// console.log(bookResultsArray[book].image);
+					// console.log(bookResultsArray[book].isbn13);
+					// console.log(bookResultsArray[book].publishedDate);
+					// console.log(bookResultsArray[book].title);
+
+					addBookToDatabase()
 
 				}
 

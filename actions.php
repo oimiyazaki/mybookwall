@@ -1,7 +1,10 @@
 <?php 
 
-////////////// Login Signup page //////////////
 
+////////////// Sessions //////////////
+
+    // Start session
+    session_start();
 
 
 	// Check if a cookie exist. If it does, create a session
@@ -11,25 +14,9 @@
 
 	}
 
-	// // If a session doesn't exist, redirect to sign up/ log in page
-	// if (!array_key_exists("username", $_SESSION)) {
 
-	// 	header("Location: http://mybookwall.com");
 
-	// }
-
-	// if session exists, welcome
-	if (array_key_exists("username", $_SESSION)) {
-
-		// $menu = "<li class='menu-right'><form method='post' id='logOut'><input type='submit' name='LogOut' value='Log out'></form></li>";
-		$menu = "<li class='menu-left'><a href='http://mybookwall.com/?p=addabook'>Add a Book</a></li><li class='menu-right'><form method='post' id='logOut'><input type='submit' name='LogOut' value='Log out'></form></li>";
-
-	} else {
-
-		$menu = "";
-
-	}
-
+////////////// connect to DB //////////////
 
 
 	// Connect to DB
@@ -47,6 +34,22 @@
 
 
 	} 
+
+////////////// Display header //////////////
+
+	// if session exists, welcome
+	if (array_key_exists("username", $_SESSION)) {
+
+		$menu = "<li class='menu-left'><a href='http://mybookwall.com/?p=addabook'>Add a Book</a></li><li class='menu-right'><form method='post' id='logOut'><input type='submit' name='LogOut' value='Log out'></form></li>";
+
+	} else {
+
+		$menu = "";
+
+	}
+
+////////////// Login Signup page //////////////
+
 
 	// Set variables
 	$errorSignUp = "";
@@ -95,7 +98,7 @@
 
 				$query = "INSERT INTO users (email, password) VALUES ('".$email."', '".$hash."')";
 
-				if (mysqli_query($link, $query) === TRUE) {  /////////// Test Code: Replace -> TRUE with -> (mysqli_query($link, $query) === TRUE)
+				if (mysqli_query($link, $query) === TRUE) {  
 
 					// If they decided to stay logged in, create cookie
 					if (isset($_POST["stayLoggedInSignUp"])) {
@@ -149,7 +152,7 @@
 			// If no errors were found continue
 			if ($errorLogIn == "") {
 
-				// Query for email addres in DB
+				// Query for email address in DB
 				$query = "SELECT * FROM users WHERE email = '".$email."'";
 
 				$result = mysqli_query($link, $query);
@@ -225,6 +228,51 @@
 ////////////// search page //////////////
 
 
+	if (isset($_GET["author"]) && isset($_GET["image"]) && isset($_GET["isbn13"]) && isset($_GET["publishedDate"]) && isset($_GET["title"])) { // ::::::::::::::::::: Change GET to POST
+
+		$author = mysqli_real_escape_string($link, $_GET["author"]); // ::::::::::::::: Change GET to POST
+		$image = mysqli_real_escape_string($link, $_GET["image"]); // ::::::::::::::: Change GET to POST
+		$isbn13 = mysqli_real_escape_string($link, $_GET["isbn13"]); // ::::::::::::::: Change GET to POST
+		$publishedDate = mysqli_real_escape_string($link, $_GET["publishedDate"]); // ::::::::::::::: Change GET to POST
+		$title = mysqli_real_escape_string($link, $_GET["title"]); // ::::::::::::::: Change GET to POST
+
+
+		// check isbn13 already exists in DB
+		$query = "SELECT * FROM `book` WHERE `isbn13` = '".$isbn13."'";
+
+		$result = mysqli_query($link, $query);
+
+		if (mysqli_num_rows($result) > 0) {
+
+			echo "<p>The book entered is already in use.</p>";
+
+		} else {
+
+			echo "<p>book not found.</p>";
+
+			// Add book to the database
+
+			$query = "INSERT INTO `book` (`author`, `image`, `isbn13`, `publishedDate`, `title`) VALUES ('".$author."', '".$image."', '".$isbn13."', '".$publishedDate."', '".$title."')";
+
+			if (mysqli_query($link, $query) === TRUE) {  
+
+				// success
+				echo "<p>book added successfully.</p>";
+
+
+			} else {
+
+				// Show error if the user could not be added 
+				echo "<p>Book could not be added. Please try again.</p>";
+
+			}				
+
+
+		}
+
+
+
+	}
 
 
 
