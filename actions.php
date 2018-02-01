@@ -110,6 +110,7 @@
 					// Create session and log them in
 					$_SESSION["username"] = $email; 
 
+
 					header("Location: http://mybookwall.com");
 
 
@@ -228,6 +229,64 @@
 ////////////// search page //////////////
 
 
+	function bookId($isbn13, $link)
+	{
+		$isbn13 = $isbn13;
+		$link = $link;
+
+		$query = "SELECT `bookId` FROM `book` WHERE `isbn13` = '".$isbn13."'";
+
+		$result = mysqli_query($link, $query);
+
+		$row = mysqli_fetch_array($result);
+
+		return $row["bookId"];
+
+	}
+
+
+	function userId($link)
+	{
+
+		$link = $link;
+
+		$query = "SELECT `userId` FROM `users` WHERE email = '".$_SESSION["username"]."'";
+
+		$result = mysqli_query($link, $query);
+
+		$row = mysqli_fetch_array($result);
+
+		return $row["userId"];
+
+	}
+
+
+	function addBookToCollectionsDb($isbn13, $link) {
+    			
+    			$isbn13 = $isbn13;
+    			$link = $link;
+
+				// Add book to collections db using the bookId and userId
+				$query = "INSERT INTO `collectionId` (`userId`, `bookId`) VALUES ('".userId($link)."', '".bookId($isbn13, $link)."')";
+
+				if (mysqli_query($link, $query) === TRUE) {  
+
+					// success
+					echo "{success : 'Book added successfully to collections db.'}";
+					
+					// get bookId to then add it to the collections table
+
+
+				} else {
+
+					// Show error if the user could not be added 
+					echo "{error : 'Could not add book collections db.'}";
+
+				}				
+
+	};
+
+
 	if (isset($_GET["author"]) && isset($_GET["image"]) && isset($_GET["isbn13"]) && isset($_GET["publishedDate"]) && isset($_GET["title"])) { // ::::::::::::::::::: Change GET to POST
 
 		$author = mysqli_real_escape_string($link, $_GET["author"]); // ::::::::::::::: Change GET to POST
@@ -237,33 +296,53 @@
 		$title = mysqli_real_escape_string($link, $_GET["title"]); // ::::::::::::::: Change GET to POST
 
 
-		// check isbn13 already exists in DB
+		// qeury to check if isbn13 already exists in DB
 		$query = "SELECT * FROM `book` WHERE `isbn13` = '".$isbn13."'";
 
 		$result = mysqli_query($link, $query);
 
+		// Check if the book is already in the book db. 
 		if (mysqli_num_rows($result) > 0) {
 
-			echo "<p>The book entered is already in use.</p>";
 
-		} else {
+				echo "book is already in book db";
 
-			echo "<p>book not found.</p>";
+				// book is already in book db. check if the book is already in the collections db for this user
+				$query = "SELECT * FROM `collectionId` WHERE `userId` = '".userId($link)."' AND `bookId` = '".bookId($isbn13, $link)."'";
 
-			// Add book to the database
+				// $result = mysqli_query($link, $query);
 
+				if ($result = mysqli_query($link, $query)) {
+					
+
+					// add book to collections db
+					addBookToCollectionsDb($isbn13, $link);
+
+				} else {
+
+
+					// book is already in collections db.
+					echo "book is already in collections db";
+				}
+
+		} else { 
+
+			// Add book to the book db
 			$query = "INSERT INTO `book` (`author`, `image`, `isbn13`, `publishedDate`, `title`) VALUES ('".$author."', '".$image."', '".$isbn13."', '".$publishedDate."', '".$title."')";
 
 			if (mysqli_query($link, $query) === TRUE) {  
 
 				// success
-				echo "<p>book added successfully.</p>";
-
+				echo "{success : 'Book added successfully to book db.'}";
+				
+				// add book to collections db
+				addBookToCollectionsDb($isbn13, $link); 
 
 			} else {
 
 				// Show error if the user could not be added 
-				echo "<p>Book could not be added. Please try again.</p>";
+				echo "{error : 'Could not add book to book db.'}";
+
 
 			}				
 

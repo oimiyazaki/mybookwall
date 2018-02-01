@@ -83,7 +83,7 @@
 			} 
 
 			// construct html
-			bookResults += "<tr><td><img src=" + image + "></td><td><strong>" + title + "<br></strong><br>by " + author + "<br><br>Published: " + publishedDate + "<br><br>ISBN-13: " + isbn13 + "<br><td><button class='button' isbn13='" + isbn13 +"'>Add to Library</button></td></tr>";
+			bookResults += "<tr><td><img src=" + image + "></td><td><strong>" + title + "<br></strong><br>by " + author + "<br><br>Published: " + publishedDate + "<br><br>ISBN-13: " + isbn13 + "<br><td><button class='button' isbn13='" + isbn13 +"'>Adding...</button><p>Oh oh!<br>Could not add.<br>Try agian. </p></td></tr>";
 
 
 			// build array of book objects
