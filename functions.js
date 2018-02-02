@@ -85,7 +85,6 @@
 			// construct html
 			bookResults += "<tr><td><img src=" + image + "></td><td><strong>" + title + "<br></strong><br>by " + author + "<br><br>Published: " + publishedDate + "<br><br>ISBN-13: " + isbn13 + "<br><td><button class='button' isbn13='" + isbn13 +"'>Adding...</button><p>Oh oh!<br>Could not add.<br>Try agian. </p></td></tr>";
 
-
 			// build array of book objects
 			var bookObj = {
 			  isbn13 : isbn13,
@@ -98,7 +97,6 @@
 			// push object to array
 			bookResultsArray.push(bookObj);
 
-
 		}
 		
 		// finish creating the search table
@@ -107,36 +105,25 @@
 		// Add table to DOM
 		$("#search-table-container").html(bookResults);
 
-
-		///////////// Make the Add to Library work /////////////
-
-
+		///////////// Make the Add to Library button work /////////////
 		function addBookToDatabase() {
+
 		$.ajax({
 			url: "http://mybookwall.com/actions.php?author=" + bookResultsArray[book].author + "&image=" + bookResultsArray[book].image + "&isbn13=" + bookResultsArray[book].isbn13 + "&publishedDate=" + bookResultsArray[book].publishedDate + "&title=" + bookResultsArray[book].title + "",
 			type: "GET", /// ::::::::::::::::: Change GET to POST
 			success: function(data) {
 
-
 				console.log(data);
-
 
 			}});
 
 		}
-
 
 		$("button").click(function () {
 			
 			for (book in bookResultsArray) {
 
 				if (bookResultsArray[book].isbn13 == $(this).attr("isbn13")) {
-
-					// console.log(bookResultsArray[book].author);
-					// console.log(bookResultsArray[book].image);
-					// console.log(bookResultsArray[book].isbn13);
-					// console.log(bookResultsArray[book].publishedDate);
-					// console.log(bookResultsArray[book].title);
 
 					addBookToDatabase()
 
@@ -146,11 +133,20 @@
 
 		});
 
-		
-		
-
-
-
-
-
 	}
+
+////////////// add a book page //////////////
+
+function displayBookWall() {
+
+	$.ajax({
+		url: "http://mybookwall.com/actions.php?mybookwall=me",
+		type: "GET",
+		success: function(data) {
+
+			// console.log(data);
+			$("#book-wall-container").html(data);
+			
+		}});
+
+}

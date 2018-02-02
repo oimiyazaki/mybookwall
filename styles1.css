@@ -129,7 +129,8 @@ header li a:hover {
 .flex-container>img {
   text-align: center;
 }
-.shadow {
+
+.flex-container>img {
   box-shadow: 0 10px 6px -6px #777;
 }
 /* ************ Books ************ */

@@ -350,9 +350,50 @@
 		}
 
 
+	}
+
+////////////// book wall page  //////////////
+
+if (isset($_GET["mybookwall"])) {
+
+	$bookIdsInCollection = "";
+
+	// search for books the user has in their collection
+	$query = "SELECT `bookId` FROM `collectionId` WHERE userId = '".userId($link)."'";
+
+	$result = mysqli_query($link, $query);
+
+	while ($row = mysqli_fetch_array($result)) {
+
+		$bookIdsInCollection .= $row["bookId"].",";
 
 	}
 
+	// bookIds in the format: (1,2,3). This is for the query
+	$bookIdsInCollection = "(".substr($bookIdsInCollection, 0, -1).")";
+
+	$query = "SELECT * FROM `book` WHERE bookId in ".$bookIdsInCollection."";
+
+	$result = mysqli_query($link, $query);
+
+	// while ($row = $result->fetch_assoc()) {
+
+	// 	echo $row["title"];
+
+	// }
+
+
+	if ($result->num_rows > 0) {
+	    // output data of each row
+	    while($row = $result->fetch_assoc()) {
+	        echo " " . $row["title"]."<br>";
+	    }
+	} else {
+	    echo "0 results";
+	}
+
+
+}
 
 
 
