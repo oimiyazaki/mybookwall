@@ -3,7 +3,6 @@
 
 
 		</footer>
-		<script src="jquery-3.2.1.min.js"></script>
 		<script type="text/javascript">
 
 
@@ -95,6 +94,7 @@
                     success: function(data) {
                     
                     // function callback(jsonp) is being called here
+
 
                     }
 

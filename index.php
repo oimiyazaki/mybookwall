@@ -1,4 +1,4 @@
-<?php 
+<?php
 
   // function, actions, header
   include ("functions.php");
@@ -16,6 +16,11 @@
       if ($_GET["p"] == "addabook") {
 
         include ("views/add-a-book.php");
+
+      // if p is 't' for test, to go prototype page
+      } elseif ($_GET["p"] == "t") {
+        
+        include ("views/home-prototype.php");
 
       // if p is anything else, go to hompage
       } else {

@@ -31,6 +31,8 @@
 
 				image = jsonp.items[book].volumeInfo.imageLinks.smallThumbnail;
 
+				// console.log(image);
+
 			} else {
 
 				image = "views/img/book_not_found.png";
@@ -83,7 +85,7 @@
 			} 
 
 			// construct html
-			bookResults += "<tr><td><img src=" + image + "></td><td><strong>" + title + "<br></strong><br>by " + author + "<br><br>Published: " + publishedDate + "<br><br>ISBN-13: " + isbn13 + "<br><td><button class='button' isbn13='" + isbn13 +"'>Adding...</button><p>Oh oh!<br>Could not add.<br>Try agian. </p></td></tr>";
+			bookResults += "<tr><td><img src=" + image + "></td><td><strong>" + title + "<br></strong><br>by " + author + "<br><br>Published: " + publishedDate + "<br><br>ISBN-13: " + isbn13 + "<br><td><button class='button-add-book' isbn13='" + isbn13 +"'>Add</button><p class='search-error'></p></td></tr>";
 
 			// build array of book objects
 			var bookObj = {
@@ -105,27 +107,45 @@
 		// Add table to DOM
 		$("#search-table-container").html(bookResults);
 
+
+
+
+
 		///////////// Make the Add to Library button work /////////////
+
+		var addBookError = "";
+
 		function addBookToDatabase() {
 
+		var url = encodeURI("http://mybookwall.com/actions.php?author=" + bookResultsArray[book].author + "&image=" + bookResultsArray[book].image + "&isbn13=" + bookResultsArray[book].isbn13 + "&publishedDate=" + bookResultsArray[book].publishedDate + "&title=" + bookResultsArray[book].title + "");
+
 		$.ajax({
-			url: "http://mybookwall.com/actions.php?author=" + bookResultsArray[book].author + "&image=" + bookResultsArray[book].image + "&isbn13=" + bookResultsArray[book].isbn13 + "&publishedDate=" + bookResultsArray[book].publishedDate + "&title=" + bookResultsArray[book].title + "",
-			type: "GET", /// ::::::::::::::::: Change GET to POST
+			url: url,
+			type: "POST", /// ::::::::::::::::: Change GET to POST
 			success: function(data) {
 
+
+				// console.log(url);
+
 				console.log(data);
+
+				addBookError
+
 
 			}});
 
 		}
 
-		$("button").click(function () {
+		$(".button-add-book").click(function () {
 			
 			for (book in bookResultsArray) {
 
 				if (bookResultsArray[book].isbn13 == $(this).attr("isbn13")) {
 
 					addBookToDatabase()
+
+
+					$(this).html("Added!");
 
 				}
 
@@ -144,9 +164,9 @@ function displayBookWall() {
 		type: "GET",
 		success: function(data) {
 
-			// console.log(data);
 			$("#book-wall-container").html(data);
 			
-		}});
+
+	}});
 
 }

@@ -226,7 +226,7 @@
 
 	}
 
-////////////// search page //////////////
+////////////// Add book & search page //////////////
 
 
 	function bookId($isbn13, $link)
@@ -266,6 +266,13 @@
     			$isbn13 = $isbn13;
     			$link = $link;
 
+
+    			// check if book is already in collection db
+
+
+
+
+
 				// Add book to collections db using the bookId and userId
 				$query = "INSERT INTO `collectionId` (`userId`, `bookId`) VALUES ('".userId($link)."', '".bookId($isbn13, $link)."')";
 
@@ -287,6 +294,7 @@
 	};
 
 
+
 	if (isset($_GET["author"]) && isset($_GET["image"]) && isset($_GET["isbn13"]) && isset($_GET["publishedDate"]) && isset($_GET["title"])) { // ::::::::::::::::::: Change GET to POST
 
 		$author = mysqli_real_escape_string($link, $_GET["author"]); // ::::::::::::::: Change GET to POST
@@ -304,25 +312,19 @@
 		// Check if the book is already in the book db. 
 		if (mysqli_num_rows($result) > 0) {
 
-
-				echo "book is already in book db";
-
 				// book is already in book db. check if the book is already in the collections db for this user
 				$query = "SELECT * FROM `collectionId` WHERE `userId` = '".userId($link)."' AND `bookId` = '".bookId($isbn13, $link)."'";
 
-				// $result = mysqli_query($link, $query);
-
 				if ($result = mysqli_query($link, $query)) {
-					
+
+					// book is already in collections db.
+					echo "{success : 'Book already added to collections db.'}";
+
+				} else {
 
 					// add book to collections db
 					addBookToCollectionsDb($isbn13, $link);
 
-				} else {
-
-
-					// book is already in collections db.
-					echo "book is already in collections db";
 				}
 
 		} else { 
@@ -354,6 +356,7 @@
 
 ////////////// book wall page  //////////////
 
+// Check to see if mybookwall property is set
 if (isset($_GET["mybookwall"])) {
 
 	$bookIdsInCollection = "";
@@ -369,28 +372,37 @@ if (isset($_GET["mybookwall"])) {
 
 	}
 
-	// bookIds in the format: (1,2,3). This is for the query
-	$bookIdsInCollection = "(".substr($bookIdsInCollection, 0, -1).")";
+	// Check if the user has zero books in their collection
+	if (!$bookIdsInCollection) {
 
-	$query = "SELECT * FROM `book` WHERE bookId in ".$bookIdsInCollection."";
+		echo "<h3>Welcome to your book wall! <a href='http://mybookwall.com/?p=addabook'>Add your first book</a>  :)</h3>";
 
-	$result = mysqli_query($link, $query);
-
-	// while ($row = $result->fetch_assoc()) {
-
-	// 	echo $row["title"];
-
-	// }
-
-
-	if ($result->num_rows > 0) {
-	    // output data of each row
-	    while($row = $result->fetch_assoc()) {
-	        echo " " . $row["title"]."<br>";
-	    }
+	// The user does have books. Continue
 	} else {
-	    echo "0 results";
+
+		// bookIds in the format: (1,2,3). This is for the query
+		$bookIdsInCollection = "(".substr($bookIdsInCollection, 0, -1).")";
+
+		$query = "SELECT * FROM `book` WHERE bookId in ".$bookIdsInCollection."";
+
+		$result = mysqli_query($link, $query);
+
+		if ($result->num_rows > 0) {
+		    // output data of each row
+		    while($row = $result->fetch_assoc()) {
+
+		        echo "<img src='" . $row["image"]."&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api'><br>";
+		        
+		    }
+
+		} else {
+		    
+		    echo "0 results";
+		
+		}
+
 	}
+
 
 
 }

@@ -30,7 +30,7 @@ body {
   padding: 0;
   margin: 0;
 }
-.button {
+.button-add-book {
   background-color: #555555;
   border: none;
   color: white;
@@ -42,7 +42,7 @@ body {
   font-size: 16px;
   cursor: pointer;
 }
-.button:hover {
+.button-add-book:hover {
   background-color: #777676;
   color: white;
 }
