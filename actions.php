@@ -269,27 +269,36 @@
 
     			// check if book is already in collection db
 
+				$query = "SELECT * FROM `collectionId` WHERE `userId` = '".userId($link)."' AND `bookId` = '".bookId($isbn13, $link)."'";
 
+				$result = mysqli_query($link, $query);
 
+				if (mysqli_num_rows($result) == 1) { // $result = mysqli_query($link, $query)
 
-
-				// Add book to collections db using the bookId and userId
-				$query = "INSERT INTO `collectionId` (`userId`, `bookId`) VALUES ('".userId($link)."', '".bookId($isbn13, $link)."')";
-
-				if (mysqli_query($link, $query) === TRUE) {  
-
-					// success
-					echo "{success : 'Book added successfully to collections db.'}";
-					
-					// get bookId to then add it to the collections table
+					// book is already in collections db.
+					echo "{success : 'Book already added to collections db.'}";
 
 
 				} else {
 
-					// Show error if the user could not be added 
-					echo "{error : 'Could not add book collections db.'}";
+								
+					// Add book to collections db using the bookId and userId
+					$query = "INSERT INTO `collectionId` (`userId`, `bookId`) VALUES ('".userId($link)."', '".bookId($isbn13, $link)."')";
 
-				}				
+					if (mysqli_query($link, $query) === TRUE) {  
+
+						// success
+						echo "{success : 'Book added successfully to collection db.'}";
+						
+
+					} else {
+
+						// Show error if the user could not be added 
+						echo "{error : 'Could not add book collections db.'}";
+
+					}	
+
+				}
 
 	};
 
@@ -312,22 +321,35 @@
 		// Check if the book is already in the book db. 
 		if (mysqli_num_rows($result) > 0) {
 
-				// book is already in book db. check if the book is already in the collections db for this user
-				$query = "SELECT * FROM `collectionId` WHERE `userId` = '".userId($link)."' AND `bookId` = '".bookId($isbn13, $link)."'";
+				// ::::::::::::::::::::::::::::::::::: TCS
+				// Try to add book to collections
+				addBookToCollectionsDb($isbn13, $link);
+				// ::::::::::::::::::::::::::::::::::: TCE
 
-				if ($result = mysqli_query($link, $query)) {
 
-					// book is already in collections db.
-					echo "{success : 'Book already added to collections db.'}";
+				// // :::::::::::::::::::::::::::::::::: Original code start
 
-				} else {
+				// // book is already in book db. check if the book is already in the collections db for this user
+				// $query = "SELECT * FROM `collectionId` WHERE `userId` = '".userId($link)."' AND `bookId` = '".bookId($isbn13, $link)."'";
 
-					// add book to collections db
-					addBookToCollectionsDb($isbn13, $link);
+				// if ($result = mysqli_query($link, $query)) {
 
-				}
+				// 	// add book to collections db
+				// 	addBookToCollectionsDb($isbn13, $link);
+
+				// } else {
+
+				// 	// book is already in collections db.
+				// 	echo "{success : 'Book already added to collections db.'}";
+
+
+				// }
+
+				// // :::::::::::::::::::::::::::::::::: Original code END
+
 
 		} else { 
+
 
 			// Add book to the book db
 			$query = "INSERT INTO `book` (`author`, `image`, `isbn13`, `publishedDate`, `title`) VALUES ('".$author."', '".$image."', '".$isbn13."', '".$publishedDate."', '".$title."')";
