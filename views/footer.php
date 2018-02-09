@@ -1,8 +1,10 @@
 		<footer>
 			
-
+		<!-- The actual snackbar -->
+		<div id="snackbar"></div>
 
 		</footer>
+
 		<script type="text/javascript">
 
 

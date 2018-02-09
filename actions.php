@@ -276,7 +276,7 @@
 				if (mysqli_num_rows($result) == 1) { // $result = mysqli_query($link, $query)
 
 					// book is already in collections db.
-					echo "{success : 'Book already added to collections db.'}";
+					echo '{"success" : "Book already added to collections db."}';
 
 
 				} else {
@@ -288,13 +288,12 @@
 					if (mysqli_query($link, $query) === TRUE) {  
 
 						// success
-						echo "{success : 'Book added successfully to collection db.'}";
-						
+						echo '{"success" : "Book added successfully to collection db."}';
 
 					} else {
 
 						// Show error if the user could not be added 
-						echo "{error : 'Could not add book collections db.'}";
+						echo '{"error" : "Could not add book collections db."}';
 
 					}	
 
@@ -321,33 +320,8 @@
 		// Check if the book is already in the book db. 
 		if (mysqli_num_rows($result) > 0) {
 
-				// ::::::::::::::::::::::::::::::::::: TCS
-				// Try to add book to collections
 				addBookToCollectionsDb($isbn13, $link);
-				// ::::::::::::::::::::::::::::::::::: TCE
-
-
-				// // :::::::::::::::::::::::::::::::::: Original code start
-
-				// // book is already in book db. check if the book is already in the collections db for this user
-				// $query = "SELECT * FROM `collectionId` WHERE `userId` = '".userId($link)."' AND `bookId` = '".bookId($isbn13, $link)."'";
-
-				// if ($result = mysqli_query($link, $query)) {
-
-				// 	// add book to collections db
-				// 	addBookToCollectionsDb($isbn13, $link);
-
-				// } else {
-
-				// 	// book is already in collections db.
-				// 	echo "{success : 'Book already added to collections db.'}";
-
-
-				// }
-
-				// // :::::::::::::::::::::::::::::::::: Original code END
-
-
+		
 		} else { 
 
 
@@ -356,8 +330,7 @@
 
 			if (mysqli_query($link, $query) === TRUE) {  
 
-				// success
-				echo "{success : 'Book added successfully to book db.'}";
+				// success : Book added successfully to book db
 				
 				// add book to collections db
 				addBookToCollectionsDb($isbn13, $link); 
@@ -365,7 +338,7 @@
 			} else {
 
 				// Show error if the user could not be added 
-				echo "{error : 'Could not add book to book db.'}";
+				echo '{"error" : "Could not add book book db."}';
 
 
 			}				
@@ -425,9 +398,73 @@ if (isset($_GET["mybookwall"])) {
 
 	}
 
-
-
 }
+
+////////////// Get book summaries  //////////////
+
+	if (isset($_GET["summary"])) { 
+
+		$bookId = mysqli_real_escape_string($link, $_GET["summary"]); 
+
+		// search book db for book summary
+		$query = "SELECT `summary` FROM `book` WHERE bookId = ".$bookId."";
+
+		$result = mysqli_query($link, $query);
+
+		$row = mysqli_fetch_array($result);
+
+		// if no summary, echo "no book summary"
+		if ($row["summary"] == NULL) {
+
+			echo "no book summary";
+
+		// else, echo summary links
+		} else {
+
+			// make sting into a JSON 
+			$summaryArray = json_decode($row["summary"]);
+
+			foreach ($summaryArray as $link) {
+
+				$title = $link->title;
+				$url = $link->url;
+
+				echo"<a href='$url'>$title</a><br>";
+
+			}
+
+
+		}
+
+
+
+		// $summary = '[
+		// 				{ 
+		// 					"title" : "Google Summary",
+		// 					"url" : "https://www.google.com/"
+		// 				},
+		// 				{ 
+		// 					"title" : "Yahoo Summary",
+		// 					"url" : "https://www.yahoo.com/"
+		// 				}
+		// 			]';
+
+		// echo $summary;
+
+		// $summaryArray = json_decode($summary);
+
+		// foreach ($summaryArray as $link) {
+
+		// 	$title = $link->title;
+		// 	$url = $link->url;
+
+		// 	echo"<a href='$url'>$title</a><br>";
+
+		// }
+
+	
+
+	}
 
 
 

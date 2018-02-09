@@ -12,6 +12,23 @@
 
 ////////////// add a book page //////////////
 
+
+	function displayToast(message) {
+
+		$("#snackbar").html(message);
+
+	    // Get the snackbar DIV
+	    var x = document.getElementById("snackbar")
+
+	    // Add the "show" class to DIV
+	    x.className = "show";
+
+
+	    // After 3 seconds, remove the show class from DIV
+	    setTimeout(function(){ x.className = x.className.replace("show", ""); }, 3000);
+	}
+
+
 	function callback(jsonp) {
 
 
@@ -124,17 +141,28 @@
 			type: "POST", /// ::::::::::::::::: Change GET to POST
 			success: function(data) {
 
+				var response = data;
+				response = JSON.parse(response);
 
-				// console.log(url);
+				if (response.success == "Book already added to collections db.") {
 
-				console.log(data);
+						displayToast("Book already added.");
 
-				addBookError
+				} else if (response.success == "Book added successfully to collection db.") {
 
+					displayToast("Successfully added book.");
+
+				} else {
+
+					displayToast("Could not add book. Please try again.");
+
+				}
 
 			}});
 
+
 		}
+
 
 		$(".button-add-book").click(function () {
 			
@@ -142,10 +170,7 @@
 
 				if (bookResultsArray[book].isbn13 == $(this).attr("isbn13")) {
 
-					addBookToDatabase()
-
-
-					$(this).html("Added!");
+					addBookToDatabase();
 
 				}
 
