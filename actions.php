@@ -424,45 +424,48 @@ if (isset($_GET["mybookwall"])) {
 			// make sting into a JSON 
 			$summaryArray = json_decode($row["summary"]);
 
+
+			// // TCS - escape :::::::::::::::::::::::::::::::::::::::::::::::::::
+			// $escape = $link->real_escape_string("Zero to one — my summary of Peter Thiel’s book");
+			// echo $escape;	
+
+			// // TCE - :::::::::::::::::::::::::::::::::::::::::::::::::::		
+
+
+			// // print_r test code. :::::::::::::: END
+			// $summary = '[
+			// 		{
+			// 			"title" : "Good to Great by Jim Collins [BOOK SUMMARY & PDF]",
+			// 			"url" : "https://paulminors.com/good-to-great-jim-collins-book-summary-pdf/"
+			// 		},
+			// 		{
+			// 			"title" : "Executive Book Summary - GOOD TO GREAT",
+			// 			"url" : "https://ventell.co.nz/wp-content/uploads/2014/06/Good-to-Great-Executive-Summary.pdf"
+			// 		},
+			// 		{
+			// 			"title" : "Book Summary – Good to Great: Why Some Companies Make the Leap…and Others Don’t",
+			// 			"url" : "https://readingraphics.com/book-summary-good-to-great/"
+			// 		}
+			// 	]';
+			// // echo to put JSON on page
+			// echo $summary;
+
+			// // encode to create links
+			// $summaryArray = json_decode($summary);
+
+			// // print_r test code. :::::::::::::: END			
+
+
 			foreach ($summaryArray as $link) {
 
 				$title = $link->title;
 				$url = $link->url;
 
-				echo"<a href='$url'>$title</a><br>";
+				echo "<a href='$url'>$title</a><br>";
 
 			}
 
-
-		}
-
-
-
-		// $summary = '[
-		// 				{ 
-		// 					"title" : "Google Summary",
-		// 					"url" : "https://www.google.com/"
-		// 				},
-		// 				{ 
-		// 					"title" : "Yahoo Summary",
-		// 					"url" : "https://www.yahoo.com/"
-		// 				}
-		// 			]';
-
-		// echo $summary;
-
-		// $summaryArray = json_decode($summary);
-
-		// foreach ($summaryArray as $link) {
-
-		// 	$title = $link->title;
-		// 	$url = $link->url;
-
-		// 	echo"<a href='$url'>$title</a><br>";
-
-		// }
-
-	
+		}	
 
 	}
 
