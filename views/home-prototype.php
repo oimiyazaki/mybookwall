@@ -25,13 +25,10 @@
         <img id="the-hard-thing-about-hard-things" src="https://images-na.ssl-images-amazon.com/images/I/51slqM2g3jL.jpg"> 
         <img id="business-model-canvas" src="https://images-na.ssl-images-amazon.com/images/I/61wumph8%2B4L.jpg"> 
 
-        
-        <img id="zero-to-one" class="book-wall-book" data-title="Zero to One" data-link-array='{ "linkArray" : [ {"title" : "Summary 1", "url" : "https://www.google.com/"} , {"title" : "Summary 2", "url" : "https://www.google.com/"} ] }' src="https://images-na.ssl-images-amazon.com/images/I/41puRJbtwkL.jpg">
-
-        <!-- '{ "linkArray" : [ {"title" : "Summary 1", "url" : "https://www.google.com/"} ] }' -->
+        <img id="zero-to-one" class="book-wall-book" data-title="Zero to One" data-book-id="11" src="https://images-na.ssl-images-amazon.com/images/I/41puRJbtwkL.jpg">
+        <img id="the-lean-startup" class="book-wall-book" data-title="Good to Great" data-book-id="30" src="https://images-na.ssl-images-amazon.com/images/I/517wplLjOXL.jpg">
 
 
-        <img id="the-lean-startup" src="https://images-na.ssl-images-amazon.com/images/I/517wplLjOXL.jpg">
         <img id="the-everything-store" src="https://images-na.ssl-images-amazon.com/images/I/51hJ%2BguIj7L.jpg"> 
         <img id="pour-your-heart-into-it" src="https://images-na.ssl-images-amazon.com/images/I/41Qb90x5eWL.jpg"> 
         <img id="how-to-win-friends-and-influence-people" src="https://images-na.ssl-images-amazon.com/images/I/718%2Bbq5ApRL.jpg"> 
@@ -42,11 +39,6 @@
         <img id="steve-jobs" src="https://images-na.ssl-images-amazon.com/images/I/81VStYnDGrL.jpg">
         <img id="the-innovators" src="https://images-na.ssl-images-amazon.com/images/I/519KsxAU05L.jpg">
         <img id="outliers" src="https://images-na.ssl-images-amazon.com/images/I/41683QNEDwL.jpg">
-        
-    </div>
-    <a href="https://goo.gl/uVjmr9">Video: The Lean Startup by Eric Ries - BOOK SUMMARY</a>
-    <a href="https://goo.gl/QHLUnM">Article: BOOK SUMMARY: THE LEAN STARTUP BY ERIC RIES</a>
-  </div>
 </div>
 <script type="text/javascript">
 
@@ -60,32 +52,44 @@
 
         $("#modal-title").html(title);
 
-        // Populate modal with links information
-        linkObj = $(this).data('link-array');
-        
+        // get bookID from html datatype
+        bookId = $(this).data('book-id');
 
-        // TEST OBJECTS
-        // linkObj = '{ "linkArray" : [ {"title" : "Summary 1", "url" : "https://www.google.com/"} ] }';
-        // linkObj = '{ "linkArray" : [ {"title" : "Summary 1", "url" : "https://www.google.com/"} , {"title" : "Summary 2", "url" : "https://www.google.com/"} ] }';
+        // make request to get book summaries
+        function getBookSummary() {
 
-        // console.log(linkObj["linkArray"][0].title);
-        // console.log(linkObj["linkArray"][0].url);
-        // console.log(linkObj["linkArray"][1].title);
-        // console.log(linkObj["linkArray"][1].url);
+            $.ajax({
+                url: "http://mybookwall.com/actions.php?summary=" + bookId + "",
+                type: "GET",
+                success: function(data) {
+                    
+                    //  parse json
+                    var summaryJson = JSON.parse(data);
 
+                    // empty variable for summary content
+                    var summaryContent = "";
 
-        var linkContent = "";
+                    // construct content from json
+                    for (summary in summaryJson) {
 
-        for (link in linkObj.linkArray) {
+                        var title = summaryJson[summary].title;
+                        var url = summaryJson[summary].url;
 
-        console.log(linkObj["linkArray"][link].title);
-        console.log(linkObj["linkArray"][link].url);
+                        summaryContent += `<a href="${url}">${title}</a><br>`;
 
-        linkContent += "<p><a href='" + linkObj["linkArray"][link].title + "'>" + linkObj["linkArray"][link].url + "</a></p>";
+                    }
+
+                    // insert content into html
+                    $("#modal-summaries").html(summaryContent);
+
+            }});
 
         }
 
-        $("#modal-summaries").html(linkContent);
+        // executre get book summaries
+        getBookSummary();
+
+
 
     }); 
 

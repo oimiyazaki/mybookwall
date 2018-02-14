@@ -386,8 +386,10 @@ if (isset($_GET["mybookwall"])) {
 		    // output data of each row
 		    while($row = $result->fetch_assoc()) {
 
-		        echo "<img src='" . $row["image"]."&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api'><br>";
+		        // echo "<img src='" . $row["image"]."&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api'><br>";
 		        
+		    	echo "<img class='book-wall-book' data-title='".$row["title"]."' data-book-id='".$row["bookId"]."' src='" . $row["image"]."&printsec=frontcover&img=1&zoom=5&edge=curl&source=gbs_api'><br>";
+
 		    }
 
 		} else {
@@ -416,7 +418,7 @@ if (isset($_GET["mybookwall"])) {
 		// if no summary, echo "no book summary"
 		if ($row["summary"] == NULL) {
 
-			echo "no book summary";
+			echo '{"success" : "no summary found."}';
 
 		// else, echo summary links
 		} else {
@@ -424,10 +426,12 @@ if (isset($_GET["mybookwall"])) {
 			// make sting into a JSON 
 			$summaryArray = json_decode($row["summary"]);
 
+			echo $row["summary"];
 
-			// // TCS - escape :::::::::::::::::::::::::::::::::::::::::::::::::::
-			// $escape = $link->real_escape_string("Zero to one — my summary of Peter Thiel’s book");
-			// echo $escape;	
+
+			// // // TCS - escape :::::::::::::::::::::::::::::::::::::::::::::::::::
+			// // $escape = $link->real_escape_string("Zero to one — my summary of Peter Thiel’s book");
+			// // echo $escape;	
 
 			// // TCE - :::::::::::::::::::::::::::::::::::::::::::::::::::		
 
@@ -435,16 +439,16 @@ if (isset($_GET["mybookwall"])) {
 			// // print_r test code. :::::::::::::: END
 			// $summary = '[
 			// 		{
-			// 			"title" : "Good to Great by Jim Collins [BOOK SUMMARY & PDF]",
-			// 			"url" : "https://paulminors.com/good-to-great-jim-collins-book-summary-pdf/"
+			// 			"title" : "8 Writing Lessons from Everybody Writes by Ann Handley",
+			// 			"url" : "https://blog.marketo.com/2017/06/8-writing-lessons-everybody-writes-ann-handley.html"
 			// 		},
 			// 		{
-			// 			"title" : "Executive Book Summary - GOOD TO GREAT",
-			// 			"url" : "https://ventell.co.nz/wp-content/uploads/2014/06/Good-to-Great-Executive-Summary.pdf"
+			// 			"title" : "6 Lessons from Ann Handley to Help Anyone Write Better Content",
+			// 			"url" : "https://www.impactbnd.com/blog/lessons-from-ann-handley-everyone-write-better-content"
 			// 		},
 			// 		{
-			// 			"title" : "Book Summary – Good to Great: Why Some Companies Make the Leap…and Others Don’t",
-			// 			"url" : "https://readingraphics.com/book-summary-good-to-great/"
+			// 			"title" : "Key Takeaways From Everybody Writes",
+			// 			"url" : "https://hub.uberflip.com/blog/key-takeaways-from-ann-handleys-everybody-writes"
 			// 		}
 			// 	]';
 			// // echo to put JSON on page
@@ -455,15 +459,6 @@ if (isset($_GET["mybookwall"])) {
 
 			// // print_r test code. :::::::::::::: END			
 
-
-			foreach ($summaryArray as $link) {
-
-				$title = $link->title;
-				$url = $link->url;
-
-				echo "<a href='$url'>$title</a><br>";
-
-			}
 
 		}	
 

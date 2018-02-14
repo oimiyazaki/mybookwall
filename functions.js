@@ -180,7 +180,61 @@
 
 	}
 
-////////////// add a book page //////////////
+////////////// Book wall page //////////////
+
+// make request to get book summaries and populate modal
+function getBookSummary() {
+
+    $.ajax({
+        url: "http://mybookwall.com/actions.php?summary=" + bookId + "",
+        type: "GET",
+        success: function(data) {
+            
+            //  parse json
+            var summaryJson = JSON.parse(data);
+
+				if (summaryJson.success == "no summary found.") {
+
+		            // insert content into html
+		            $("#modal-summaries").html("<p>No summaries yet.  :(</p>");
+
+
+				// iterate through summaries and construct html
+				} else {
+
+
+
+		            // empty variable for summary content
+		            var summaryContent = "";
+
+		            // construct content from json
+		            for (summary in summaryJson) {
+
+		                var title = summaryJson[summary].title;
+		                var url = summaryJson[summary].url;
+
+		                summaryContent += `<a href="${url}">${title}</a><br>`;
+
+		            }
+
+		            // insert content into html
+		            $("#modal-summaries").html(`<p>${summaryContent}</p>`);
+
+
+
+
+				}
+
+
+
+
+
+
+    }});
+
+}
+
+
 
 function displayBookWall() {
 
@@ -189,8 +243,32 @@ function displayBookWall() {
 		type: "GET",
 		success: function(data) {
 
-			$("#book-wall-container").html(data);
-			
+		// display book wall
+		$("#book-wall-container").html(data);
+
+		///// Open and populate modal with book summaries		
+	     $('.book-wall-book').click(function() {
+	     	console.log("hi modal");
+
+	        // open modal
+	        document.getElementById('id01').style.display='block';
+	        
+	        // Populate modal with title information
+	        title = $(this).data('title');
+
+	        $("#modal-title").html(title);
+
+	        // get bookID from html datatype
+	        bookId = $(this).data('book-id');
+
+
+	        // execute get book summaries
+	        getBookSummary();
+
+
+	    }); 
+
+
 
 	}});
 
