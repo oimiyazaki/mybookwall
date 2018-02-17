@@ -569,6 +569,12 @@ tr td:nth-child(3) {
   background-color: #663601;
   color: white;
 }
+.text-link {
+  text-decoration: underline;
+}
+#addSummaryForm {
+  display: none;
+}
 /************* Snackbar *************/
 /* The snackbar - position it at the bottom and in the middle of the screen */
 #snackbar {

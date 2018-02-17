@@ -1,4 +1,4 @@
-<?php 
+<?php
 
 
 ////////////// Sessions //////////////
@@ -464,6 +464,179 @@ if (isset($_GET["mybookwall"])) {
 
 	}
 
+////////////// Add book summary (title and url) //////////////
+
+
+function createSummaryJson($title, $url) {
+
+		$summary = '{ "title" : "'.$title.'", "url" : "'.$url.'" }';
+
+		return $summary;
+
+}
+
+function createFirstSummaryJson($title, $url) {
+
+		$summary = "[ ".createSummaryJson($title, $url)." ]";
+
+		return $summary;
+
+}
+
+function addNewSummaryStringToExistingSummaryString($newSummary, $existingSummary) {
+	// :::::::::::::::::::::::::::::::::::: s
+	// echo "1. existingSummary:<br>";
+	// print_r($existingSummary);
+	// echo "<br><br>";
+
+	// echo "2. newSummary:<br>";
+	// print_r($newSummary);
+	// echo "<br><br>";
+	// :::::::::::::::::::::::::::::::::::: e
+
+	// create existingSummary (which is an array with objects inside) that is string into a JSON 
+	$existingSummaryJsonArray = json_decode($existingSummary);
+
+	// // :::::::::::::::::::::::::::::::::::: s
+	// echo "3. existingSummaryJsonArray:";
+	// print_r($existingSummaryJsonArray);
+	// echo "<br><br>";
+	// // :::::::::::::::::::::::::::::::::::: e
+
+
+	// create Json object for the very first summary (which is an object)
+	$newSummaryJsonObject = json_decode($newSummary);
+
+	// :::::::::::::::::::::::::::::::::::: s
+	// echo "4. newSummaryJsonObject:<br>";
+	// // $newSummaryJsonObject = "hi";
+	// print_r($newSummaryJsonObject);
+	// echo "<br><br>";
+	// // :::::::::::::::::::::::::::::::::::: e
+
+
+	// append the new summary to the exisitng summaries
+	array_push($existingSummaryJsonArray, $newSummaryJsonObject);
+
+	// // :::::::::::::::::::::::::::::::::::: s
+	// echo "5. existingSummaryJsonArray:<br>";
+	// print_r($existingSummaryJsonArray);
+	// echo "<br><br>";
+	// // :::::::::::::::::::::::::::::::::::: e
+
+
+	// make the new and old summaries into a string
+	$newSummary = json_encode($existingSummaryJsonArray);
+
+	// // :::::::::::::::::::::::::::::::::::: s
+	// echo "6. newSummary:<br>";
+	// print_r($newSummary);
+	// echo "<br><br>";
+	// // :::::::::::::::::::::::::::::::::::: e
+
+
+	return $newSummary;
+
+}
+
+function updateBookDbWithNewSummaryJsonString($newSummary, $bookId, $link) {
+
+	$query = "UPDATE `prodV1`.`book` SET `summary` = '".$newSummary."' WHERE `book`.`bookId` = '".$bookId."'";
+
+	if (mysqli_query($link, $query) === TRUE) {  
+
+		// success
+		echo '{"success" : "Summary added successfully to book db."}';
+
+	} else {
+
+		// Show error if the summary could not be added 
+		echo '{"error" : "Could not add summary book db."}';
+
+	}	
+
+}
+
+
+if (isset($_GET["bookId"]) && isset($_GET["title"]) && isset($_GET["url"])) {
+
+	$bookId = mysqli_real_escape_string($link, $_GET["bookId"]); // ::::::::::::::: Change GET to POST
+	$title = mysqli_real_escape_string($link, $_GET["title"]); // ::::::::::::::: Change GET to POST
+	$url = mysqli_real_escape_string($link, $_GET["url"]); // ::::::::::::::: Change GET to POST
+
+
+	// ::::::::::::::::::::::::: Start
+
+	// $title = htmlentities($title);
+
+	// echo $titleClean;
+
+	// echo html_entity_decode($titleClean);
+
+
+	// ::::::::::::::::::::::::: End
+
+
+
+	// Validate title is not empty and URL is valid
+	if ($title == "" || !filter_var($url, FILTER_VALIDATE_URL)) {
+
+		echo '{"error" : "Enter a valid title and URL."}';
+
+	} else {
+
+		// search book db for book summary
+		$query = "SELECT `summary` FROM `book` WHERE bookId = ".$bookId."";
+
+		$result = mysqli_query($link, $query);
+
+		$row = mysqli_fetch_array($result);
+
+		$existingSummary = $row["summary"];
+
+		// if no summary, add new summary link to book db
+		if ($existingSummary == NULL) {
+
+			// create Json format string for the very first summary
+			$newSummary = createFirstSummaryJson($title, $url);
+
+			// add new summary to book db
+			updateBookDbWithNewSummaryJsonString($newSummary, $bookId, $link);
+
+		// else, add summary link to existing links in the book db
+		} else {
+
+			// create Json format string for the new summary
+			$newSummary = createSummaryJson($title, $url);
+
+			// append the new summary to the exisitng summaries. The output is a string in JSON format.
+			$newSummary = addNewSummaryStringToExistingSummaryString($newSummary, $existingSummary);
+
+			// add new summary to book db
+			updateBookDbWithNewSummaryJsonString($newSummary, $bookId, $link);
+
+		}
+
+	}
+
+}
+
+// // ::::::::::::::::::::::::::::::::::::::::::::::::: Start
+
+// echo "<br><br><br><br><br>::::::::::::::::::::::::::::::::::::::::::::::::::<br><br>";
+
+// $string = '{ "title" : "Life\'2", "url" : "https://www.google.com" }';
+
+// echo($string);
+// echo "<br><br>";
+// print_r(json_decode($string));
+// echo "<br><br>";
+// echo(json_encode($string));
+// echo "<br><br>";
+// print_r(json_decode($string));
+// echo "<br><br>";
+// echo(json_encode($string));
+// // ::::::::::::::::::::::::::::::::::::::::::::::::: End
 
 
  ?>
