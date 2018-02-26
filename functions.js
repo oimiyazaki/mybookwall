@@ -1,3 +1,5 @@
+////////////// Helper function //////////////
+
 
 ////////////// Login Signup page //////////////
 
@@ -102,7 +104,7 @@
 			} 
 
 			// construct html
-			bookResults += "<tr><td><img src=" + image + "></td><td><strong>" + title + "<br></strong><br>by " + author + "<br><br>Published: " + publishedDate + "<br><br>ISBN-13: " + isbn13 + "<br><td><button class='button-add-book' isbn13='" + isbn13 +"'>Add</button><p class='search-error'></p></td></tr>";
+			bookResults += "<tr><td><img class='add-book-image' src=" + image + "></td><td><strong>" + title + "<br></strong><br>by " + author + "<br><br>Published: " + publishedDate + "<br><br>ISBN-13: " + isbn13 + "<br><td><button class='button-add-book' isbn13='" + isbn13 +"'>Add</button><p class='search-error'></p></td></tr>";
 
 			// build array of book objects
 			var bookObj = {
@@ -195,8 +197,8 @@ function getBookSummary() {
 
 				if (summaryJson.success == "no summary found.") {
 
-		            // insert content into html
-		            $("#modal-summaries").html("<p>No summaries yet.  :(</p>");
+		            // insert content into html. The data-no-summary atribute is we can clear this no summary text the first tiem we add a new summary
+		            $("#modal-summaries").html("<p id='modal-no-summary' data-no-summary='yes'>No summaries yet.  :(</p>");
 
 
 				// iterate through summaries and construct html
@@ -213,22 +215,17 @@ function getBookSummary() {
 		                var title = summaryJson[summary].title;
 		                var url = summaryJson[summary].url;
 
+		                // Decode the title because it's stored urlCoded
+		                title = decodeURIComponent(title);
+
 		                summaryContent += `<a href="${url}">${title}</a><br>`;
 
 		            }
 
 		            // insert content into html
-		            $("#modal-summaries").html(`<p>${summaryContent}</p>`);
-
-
-
+		            $("#modal-summaries").html(summaryContent);
 
 				}
-
-
-
-
-
 
     }});
 
@@ -248,7 +245,6 @@ function displayBookWall() {
 
 		///// Open and populate modal with book summaries		
 	     $('.book-wall-book').click(function() {
-	     	console.log("hi modal");
 
 	        // open modal
 	        document.getElementById('id01').style.display='block';
@@ -261,7 +257,9 @@ function displayBookWall() {
 	        // get bookID from html datatype
 	        bookId = $(this).data('book-id');
 
-
+	        // Populate modal with bookID (the modal needs to bookId to use it to make API requests)
+	       	$("#modalBookId").data('data-book-id', bookId);
+			
 	        // execute get book summaries
 	        getBookSummary();
 

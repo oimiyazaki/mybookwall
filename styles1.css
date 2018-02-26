@@ -30,22 +30,6 @@ body {
   padding: 0;
   margin: 0;
 }
-.button-add-book {
-  background-color: #555555;
-  border: none;
-  color: white;
-  padding: 15px 32px;
-  text-align: center;
-  text-decoration: none;
-  display: inline-block;
-  border-radius: 4px;
-  font-size: 16px;
-  cursor: pointer;
-}
-.button-add-book:hover {
-  background-color: #777676;
-  color: white;
-}
 input[type=text] {
   width: 100%;
   padding: 12px 20px;
@@ -77,6 +61,9 @@ input[type=password] {
 
 .button-submit:hover {
   background-color: #d63a2f;
+}
+.text-error {
+  color: red;
 }
 /************* header *************/
 header ul {
@@ -136,7 +123,9 @@ header li a:hover {
 /* ************ Books ************ */
 @media only screen and (max-width: 599.5px) { /* for-phone-only */
   .flex-container>img {
-    margin: 10px 10px;
+    margin: 20px 5px;
+    width: 20%;
+    height: 20%;
   }
   #elon-musk {
       width: calc(100 * .20 * 6px);
@@ -201,8 +190,8 @@ header li a:hover {
 }   
 @media only screen and (min-width: 600px) { /* for-tablet-portrait-up */
   .flex-container>img {
-    margin: 15px 15px;
-  }      
+    margin: 20px 5px;
+  }
   #elon-musk {
       width: calc(100 * .25 * 6px);
       height: calc(100 * .25 * 9px);
@@ -266,8 +255,8 @@ header li a:hover {
 }    
 @media only screen and (min-width: 900px) { /* for-tablet-landscape-up */
   .flex-container>img {
-    margin: 20px 20px;
-  }
+    margin: 30px 25px;
+  } 
   #elon-musk {
       width: calc(100 * .30 * 6px);
       height: calc(100 * .30 * 9px);
@@ -331,8 +320,8 @@ header li a:hover {
 }
 @media only screen and (min-width: 1200px) { /* for-desktop-up */
   .flex-container>img {
-    margin: 30px 30px;
-  }
+    margin: 30px 40px;
+  } 
   #elon-musk {
       width: calc(100 * .35 * 6px);
       height: calc(100 * .35 * 9px);
@@ -525,12 +514,12 @@ header li a:hover {
 
 /************* Search Page *************/
 #searchBookQuery {
-  width: 400px;
+  max-width: 400px;
   float: left;
 }
 
 #searchBookButton {
-  width: 100px;
+  max-width: 100px;
   float: left;
 }
 #search-table-container {
@@ -550,14 +539,65 @@ th, td {
 tr {
   border-top: 1px solid Tan; 
 }
+/*book image column*/
 tr td:nth-child(1) {
   max-width: 150px;
 }
+/*book description column*/
 tr td:nth-child(2) {
   max-width: 400px;
 }
+/*book add-book-button column*/
 tr td:nth-child(3) {
   max-width: 100px;
+}
+.add-book-image {
+	min-width: 50px;
+}
+.button-add-book {
+  background-color: #555555;
+  border: none;
+  color: white;
+  padding: 15px 32px;
+  text-align: center;
+  text-decoration: none;
+  display: inline-block;
+  border-radius: 4px;
+  font-size: 16px;
+  cursor: pointer;
+}
+.button-add-book:hover {
+  background-color: #777676;
+  color: white;
+}
+@media only screen and (max-width: 599.5px) { /* for-phone-only */
+	.add-book-image {
+		width: 65px;
+	}
+	.button-add-book {
+	  padding: 2px 2px;
+	  font-size: 16px;
+	  width: 60px;
+	  height: 50px;
+	}
+	th, td {
+	  text-align: left;
+	  vertical-align: top;
+	  padding: 5px;
+	}
+	/*book image column*/
+	tr td:nth-child(1) {
+	  width: 70px;
+	}
+	/*book description column*/
+	tr td:nth-child(2) {
+	  width: 150px;
+	}
+	/*book add-book-button column*/
+	tr td:nth-child(3) {
+	  width: 75px;
+	}
+
 }
 /************* Book wall page *************/
 .book-wall-book {

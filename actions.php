@@ -426,40 +426,8 @@ if (isset($_GET["mybookwall"])) {
 			// make sting into a JSON 
 			$summaryArray = json_decode($row["summary"]);
 
-			echo $row["summary"];
-
-
-			// // // TCS - escape :::::::::::::::::::::::::::::::::::::::::::::::::::
-			// // $escape = $link->real_escape_string("Zero to one — my summary of Peter Thiel’s book");
-			// // echo $escape;	
-
-			// // TCE - :::::::::::::::::::::::::::::::::::::::::::::::::::		
-
-
-			// // print_r test code. :::::::::::::: END
-			// $summary = '[
-			// 		{
-			// 			"title" : "8 Writing Lessons from Everybody Writes by Ann Handley",
-			// 			"url" : "https://blog.marketo.com/2017/06/8-writing-lessons-everybody-writes-ann-handley.html"
-			// 		},
-			// 		{
-			// 			"title" : "6 Lessons from Ann Handley to Help Anyone Write Better Content",
-			// 			"url" : "https://www.impactbnd.com/blog/lessons-from-ann-handley-everyone-write-better-content"
-			// 		},
-			// 		{
-			// 			"title" : "Key Takeaways From Everybody Writes",
-			// 			"url" : "https://hub.uberflip.com/blog/key-takeaways-from-ann-handleys-everybody-writes"
-			// 		}
-			// 	]';
-			// // echo to put JSON on page
-			// echo $summary;
-
-			// // encode to create links
-			// $summaryArray = json_decode($summary);
-
-			// // print_r test code. :::::::::::::: END			
-
-
+			echo $row["summary"];		
+			
 		}	
 
 	}
@@ -484,56 +452,14 @@ function createFirstSummaryJson($title, $url) {
 }
 
 function addNewSummaryStringToExistingSummaryString($newSummary, $existingSummary) {
-	// :::::::::::::::::::::::::::::::::::: s
-	// echo "1. existingSummary:<br>";
-	// print_r($existingSummary);
-	// echo "<br><br>";
 
-	// echo "2. newSummary:<br>";
-	// print_r($newSummary);
-	// echo "<br><br>";
-	// :::::::::::::::::::::::::::::::::::: e
-
-	// create existingSummary (which is an array with objects inside) that is string into a JSON 
 	$existingSummaryJsonArray = json_decode($existingSummary);
 
-	// // :::::::::::::::::::::::::::::::::::: s
-	// echo "3. existingSummaryJsonArray:";
-	// print_r($existingSummaryJsonArray);
-	// echo "<br><br>";
-	// // :::::::::::::::::::::::::::::::::::: e
-
-
-	// create Json object for the very first summary (which is an object)
 	$newSummaryJsonObject = json_decode($newSummary);
 
-	// :::::::::::::::::::::::::::::::::::: s
-	// echo "4. newSummaryJsonObject:<br>";
-	// // $newSummaryJsonObject = "hi";
-	// print_r($newSummaryJsonObject);
-	// echo "<br><br>";
-	// // :::::::::::::::::::::::::::::::::::: e
-
-
-	// append the new summary to the exisitng summaries
 	array_push($existingSummaryJsonArray, $newSummaryJsonObject);
 
-	// // :::::::::::::::::::::::::::::::::::: s
-	// echo "5. existingSummaryJsonArray:<br>";
-	// print_r($existingSummaryJsonArray);
-	// echo "<br><br>";
-	// // :::::::::::::::::::::::::::::::::::: e
-
-
-	// make the new and old summaries into a string
 	$newSummary = json_encode($existingSummaryJsonArray);
-
-	// // :::::::::::::::::::::::::::::::::::: s
-	// echo "6. newSummary:<br>";
-	// print_r($newSummary);
-	// echo "<br><br>";
-	// // :::::::::::::::::::::::::::::::::::: e
-
 
 	return $newSummary;
 
@@ -564,18 +490,9 @@ if (isset($_GET["bookId"]) && isset($_GET["title"]) && isset($_GET["url"])) {
 	$title = mysqli_real_escape_string($link, $_GET["title"]); // ::::::::::::::: Change GET to POST
 	$url = mysqli_real_escape_string($link, $_GET["url"]); // ::::::::::::::: Change GET to POST
 
-
-	// ::::::::::::::::::::::::: Start
-
-	// $title = htmlentities($title);
-
-	// echo $titleClean;
-
-	// echo html_entity_decode($titleClean);
-
-
-	// ::::::::::::::::::::::::: End
-
+	// encode title so it can be stored inside a JSON object and so that all special characters do not break the JSON 
+	$title = stripslashes($title); // this will remove the backslash characters that appear in fron the double quotes
+	$title = rawurlencode($title);
 
 
 	// Validate title is not empty and URL is valid
@@ -621,22 +538,7 @@ if (isset($_GET["bookId"]) && isset($_GET["title"]) && isset($_GET["url"])) {
 
 }
 
-// // ::::::::::::::::::::::::::::::::::::::::::::::::: Start
 
-// echo "<br><br><br><br><br>::::::::::::::::::::::::::::::::::::::::::::::::::<br><br>";
-
-// $string = '{ "title" : "Life\'2", "url" : "https://www.google.com" }';
-
-// echo($string);
-// echo "<br><br>";
-// print_r(json_decode($string));
-// echo "<br><br>";
-// echo(json_encode($string));
-// echo "<br><br>";
-// print_r(json_decode($string));
-// echo "<br><br>";
-// echo(json_encode($string));
-// // ::::::::::::::::::::::::::::::::::::::::::::::::: End
 
 
  ?>
